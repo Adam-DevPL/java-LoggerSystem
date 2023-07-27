@@ -5,10 +5,12 @@ import org.example.enums.AccessType;
 import java.time.LocalDateTime;
 
 public class Log {
-    final private LocalDateTime timestamp;
-    final private User creator;
-    final private String text;
-    final private AccessType type;
+    //mod static final
+    //Instant
+    private final LocalDateTime timestamp;
+    private final User creator;
+    private final String text;
+    private final AccessType type;
 
     public Log(LocalDateTime timestamp, User creator, String text, AccessType type) {
         this.timestamp = timestamp;
