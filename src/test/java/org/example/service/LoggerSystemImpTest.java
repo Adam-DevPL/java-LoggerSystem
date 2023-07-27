@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class LoggerSystemImpTest {
 
@@ -100,8 +101,8 @@ class LoggerSystemImpTest {
         List<Log> logs = loggerSystem.getLogs(basic);
         Log log = logs.get(0);
 
-        String result = loggerSystem.deleteLog(log, basic);
-        assertEquals("You don't have permission to delete this log", result);
+        assertThrowsExactly(IllegalArgumentException.class, () -> loggerSystem.deleteLog(log, basic), "You don't have permission to delete this log");
+
 
         List<Log> deletedLogs = loggerSystem.getDeletedLogs(basic);
         assertEquals(0, deletedLogs.size());

@@ -4,9 +4,9 @@ import org.example.enums.AccessType;
 
 public class User {
 
-    final String name;
+    private final String name;
 
-    final AccessType accessType;
+    private final AccessType accessType;
 
     public User(String name, AccessType accessType) {
         this.name = name;

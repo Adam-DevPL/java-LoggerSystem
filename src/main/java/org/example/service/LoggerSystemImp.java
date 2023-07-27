@@ -35,21 +35,29 @@ public class LoggerSystemImp implements LoggerSystem {
                     deletedLogs.add(log);
                     return "Log deleted";
                 }
-                return "You don't have permission to delete this log";
+                throw new IllegalArgumentException("You don't have permission to delete this log");
             }
             case BASIC -> {
-                return "You don't have permission to delete this log";
+                throw new IllegalArgumentException("You don't have permission to delete this log");
             }
             case OWNER -> {
                 logs.remove(log);
                 deletedLogs.add(log);
                 return "Log deleted";
             }
-            default -> throw new RuntimeException("Unknown access type");
+            default -> throw new IllegalArgumentException("Unknown access type");
         }
     }
 
     public List<Log> getLogs(User creator) {
+        return getAllLogs(creator, logs);
+    }
+
+    public List<Log> getDeletedLogs(User creator) {
+        return getAllLogs(creator, deletedLogs);
+    }
+
+    private List<Log> getAllLogs(User creator, List<Log> logs) {
         Predicate<Log> accessFilter = switch (creator.getAccessType()) {
             case OWNER -> log -> true;
             case ADMIN -> log -> log.getCreator().equals(creator) || log.getType().equals(AccessType.BASIC);
@@ -58,19 +66,6 @@ public class LoggerSystemImp implements LoggerSystem {
         };
 
         return logs.stream()
-                .filter(accessFilter)
-                .collect(Collectors.toList());
-    }
-
-    public List<Log> getDeletedLogs(User creator) {
-        Predicate<Log> accessFilter = switch (creator.getAccessType()) {
-            case OWNER -> log -> true;
-            case ADMIN -> log -> log.getCreator().equals(creator) || log.getType().equals(AccessType.BASIC);
-            case BASIC -> log -> log.getCreator().equals(creator);
-            default -> log -> false;
-        };
-
-        return deletedLogs.stream()
                 .filter(accessFilter)
                 .collect(Collectors.toList());
     }
